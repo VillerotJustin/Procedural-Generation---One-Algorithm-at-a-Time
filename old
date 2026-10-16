@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+
+import random
+import sys
+
+print(sys.getrecursionlimit())
+sys.setrecursionlimit(150000)
+
+from PIL import Image
+
+colors = {
+    "white": "#FFFFFF",
+    "black": "#000000",
+    "red": "#FF0000",
+    "dark_red": "#8B0000",
+    "orange": "#FFA500",
+    "yellow": "#FFFF00",
+    "lime": "#00FF00",
+    "green": "#008000",
+    "dark_green": "#006400",
+    "mint": "#98FF98",
+    "cyan": "#00FFFF",
+    "teal": "#008080",
+    "sky_blue": "#87CEEB",
+    "blue": "#0000FF",
+    "navy": "#000080",
+    "purple": "#800080",
+    "violet": "#8F00FF",
+    "magenta": "#FF00FF",
+    "pink": "#FFC0CB",
+    "brown": "#A52A2A",
+    "tan": "#D2B48C",
+    "beige": "#F5F5DC",
+    "gray": "#808080",
+    "light_gray": "#D3D3D3",
+    "dark_gray": "#404040",
+    "silver": "#C0C0C0",
+    "gold": "#FFD700",
+    "bronze": "#CD7F32",
+    "olive": "#808000",
+    "maroon": "#800000",
+}
+
+Ysize = 276
+Xsize = 1104
+
+variants = ["A", "B", "C", "D", "E", "F"]
+
+
+def hex_to_rgba(h, alpha=255):
+    h = h.lstrip("#")
+    r = int(h[0:2], 16)
+    g = int(h[2:4], 16)
+    b = int(h[4:6], 16)
+    return (r, g, b, alpha)
+
+
+def in_bounds(x, y):
+    return 0 <= x < Xsize and 0 <= y < Ysize
+
+
+def in_sbounds(x, y):
+    return 0 < x < Xsize - 1 and 0 < y < Ysize - 1
+
+
+def shuffle_dirs(dirs):
+    random.shuffle(dirs)
+
+
+def carvable(x, y, grid, visited):
+    if not in_sbounds(x, y):
+        return False
+
+    if (x, y) in visited:
+        return False
+
+    dirs = [(1, 0), (1, 1), (1, -1), (-1, 0), (-1, 1), (-1, -1), (0, 1), (0, -1)]
+    neighbor_cnt = 0
+    for dx, dy in dirs:
+        nx, ny = x + dx, y + dy
+
+        if grid[ny][nx]:
+            neighbor_cnt += 1
+
+    return neighbor_cnt < 3
+
+
+def carve(x, y, grid, visited):
+    visited.add((x, y))
+    grid[y][x] = True
+
+    dirs = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+    shuffle_dirs(dirs)
+
+    for dx, dy in dirs:
+        wx, wy = x + dx, y + dy
+
+        if carvable(wx, wy, grid, visited):
+            carve(wx, wy, grid, visited)
+
+
+grid = [[False for _ in range(Xsize)] for _ in range(Ysize)]
+border_nodes = []
+
+# Connection node
+for y in range(Ysize):
+    for x in range(Xsize):
+        if (
+            (y == 0 and (x > 0 and x < Xsize - 1 and (x % 4) == 0))
+            or (y == Ysize - 1 and (x > 0 and x < Xsize - 1 and (x % 4) == 0))
+            or (x == 0 and (y > 0 and y < Ysize - 1 and (y % 4) == 0))
+            or (x == Xsize - 1 and (y > 0 and y < Ysize - 1 and (y % 4) == 0))
+        ):
+            grid[y][x] = True
+            border_nodes.append((x, y))
+
+# start from a proper maze cell (odd coordinate)
+start_x = 4
+start_y = 0
+
+visited = set()
+carve(start_x, start_y, grid, visited)
+
+for i in range(len(border_nodes) - 1):
+    visited = set()
+    start_x, start_y = border_nodes[i]
+    carve(start_x, start_y, grid, visited)
+
+print(f"Rendering image for BG...")
+
+img = Image.new("RGBA", (Xsize, Ysize), (0, 0, 0, 0))
+px = img.load()
+
+rgba = hex_to_rgba(colors["white"])
+
+for y in range(Ysize):
+    for x in range(Xsize):
+        if grid[y][x] and px is not None:
+            px[x, y] = rgba
+
+out = f"bg.png"
+img.save(out)
+
+print("\nDone.")
