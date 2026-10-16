@@ -24,6 +24,12 @@ Today, I did the simplest implementation, which can be explained in three simple
 
 The code, if you want to test it: [Test Code](TestCodes/MiniVoronoi.py)
 
+Command to execute it from this folder
+
+```bash
+python3 TestCodes/MiniVoronoi.py
+```
+
 [Voronoi Diagram — Wikipedia](https://en.wikipedia.org/wiki/Voronoi_diagram)
 
 # French Side
