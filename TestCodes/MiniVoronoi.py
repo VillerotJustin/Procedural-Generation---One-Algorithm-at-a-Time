@@ -61,15 +61,16 @@ seed = (float)(input())
 img = Image.new("RGBA", (Xsize, Ysize), (0, 0, 0, 0))
 px = img.load()
 
-grid = Voronoi2D(Xsize, Ysize, scale, seed)
+if px is not None:
+    grid = Voronoi2D(Xsize, Ysize, scale, seed)
 
-for y in range(Ysize):
-    for x in range(Xsize):
-        grayscale_gradient = grid[x, y]
-        gray = int(255 * grayscale_gradient)
-        px[x, y] = (gray, gray, gray, 255)
+    for y in range(Ysize):
+        for x in range(Xsize):
+            grayscale_gradient = grid[x, y]
+            gray = int(255 * grayscale_gradient)
+            px[x, y] = (gray, gray, gray, 255)
 
-out = f"{file_name}.png"
-img.save(out)
+    out = f"{file_name}.png"
+    img.save(out)
 
-print("\nDone.")
+    print("\nDone.")

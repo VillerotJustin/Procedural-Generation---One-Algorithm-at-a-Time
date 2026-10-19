@@ -9,6 +9,7 @@ Hey! I'm a dev who loves procedural gen, and I'm currently challenging myself to
 ## Content
 
 - [voronoi-diagrams](#16102026-first-day-voronoi-diagrams)
+- [Random](<README#19/10/2026 Day 2 — Random>)
 
 ## 16/10/2026 First day Voronoï diagrams
 
@@ -32,6 +33,32 @@ python3 TestCodes/MiniVoronoi.py
 
 [Voronoi Diagram — Wikipedia](https://en.wikipedia.org/wiki/Voronoi_diagram)
 
+## 19/10/2026 Day 2 — Random
+
+Even today, a simple algorithm generates random noise. Although it isn't particularly useful on its own, it can be used to add texture to other algorithms.
+
+Its implementation is simple: we fill our grid with random numbers in our case, a number between 0 and 1. This allows us to create noise textures like this.
+
+![BG_Random](Images/BG_Random.png)
+
+And as I mentioned earlier, it is possible to use this noise texture to introduce variation into our textures. The following examples use the same random seed and vary only the degree of variation that the randomization applies to the Voronoi texture, ranging from 0 to 1.
+
+![BG_VoronoiRandomV0](Images/BG_VoronoiRandomV0.png)
+
+![BG_VoronoiRandomV0_15](Images/BG_VoronoiRandomV0_15.png)
+
+![BG_VoronoiRandomV0_5](Images/BG_VoronoiRandomV0_5.png)
+
+![BG_VoronoiRandomV1](Images/BG_VoronoiRandomV1.png)
+
+The code, if you want to test it: [Test Code](TestCodes/MiniRandom.py)
+
+Command to execute it from this folder
+
+```bash
+python3 TestCodes/MiniRandom.py
+```
+
 # French Side
 
 [Retour à la version anglaise](#english-side)
@@ -41,6 +68,7 @@ Salut ! Je suis développeur et j'adore la génération procédurale. Je me suis
 ## Sommaire
 
 - [Diagrammes de Voronoï](#16102026-premier-jour--diagrammes-de-voronoï)
+- [Random](<README#19/10/2026 Jour 2 — Random>)
 
 ## 16/10/2026 Premier jour — Diagrammes de Voronoï
 
@@ -61,3 +89,29 @@ python3 TestCodes/MiniVoronoi.py
 ```
 
 [Diagramme de Voronoï — Wikipédia](https://fr.wikipedia.org/wiki/Diagramme_de_Vorono%C3%AF)
+
+## 19/10/2026 Jour 2 — Bruit
+
+Aujourd'hui encore, un algorithme simple le bruit aléatoire. Bien qu'il ne soit pas vraiment utile par lui-même, il peut être utilisé pour ajouter de la texture à d'autres algorythmes.
+
+Son implémentation est simple : on remplit notre grille de nombres aléatoires, un chiffre entre 0 et 1 dans notre cas. Ce qui nous permet de créer des textures de bruit comme ceci.
+
+![BG_Random](Images/BG_Random.png)
+
+Et comme je l'ai mentionné précédemment, il est possible d'utiliser cette texture de bruit pour apporter de la variance dans nos textures. Les exemples suivants utilisent la même graine d'aléatoire et varient seulement le degré de variance que l'aléatoire applique sur la texture de Voronoi, allant de 0 à 1.
+
+![BG_VoronoiRandomV0](Images/BG_VoronoiRandomV0.png)
+
+![BG_VoronoiRandomV0_15](Images/BG_VoronoiRandomV0_15.png)
+
+![BG_VoronoiRandomV0_5](Images/BG_VoronoiRandomV0_5.png)
+
+![BG_VoronoiRandomV1](Images/BG_VoronoiRandomV1.png)
+
+Le code, si vous voulez le tester : [Code de test](TestCodes/MiniRandom.py)
+
+Commande pour l'executer depuis ce dossier
+
+```bash
+python3 TestCodes/MiniRandom.py
+```
