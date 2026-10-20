@@ -1,0 +1,9 @@
+{
+  "file_name": "BG_Voronoi_Variance_0_5",
+  "program": "VoronoiRandom2D",
+  "Xsize": 1104,
+  "Ysize": 276,
+  "scale": 100,
+  "variance": 0.5,
+  "seed": "2010.2026"
+}

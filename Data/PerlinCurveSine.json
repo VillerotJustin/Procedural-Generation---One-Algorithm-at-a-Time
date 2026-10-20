@@ -1,0 +1,9 @@
+{
+  "file_name": "BG_PerlinCurveSine",
+  "program": "PerlinCurve",
+  "Xsize": 1104,
+  "Ysize": 276,
+  "scale": 25,
+  "method": "1",
+  "seed": "2010.2026"
+}

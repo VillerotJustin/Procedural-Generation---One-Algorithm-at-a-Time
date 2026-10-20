@@ -45,5 +45,47 @@ def Voronoi2D(_sizeX: int, _sizeY: int, _scale: int, _seed: float):
     return grid
 
 
-def Voronoi3D(_sizeX: int, _sizeY: int, _sizeZ: int, _scale: float):
-    return (_sizeX, _sizeY, _sizeZ)
+# _scale = one cell per k size volume
+def Voronoi3D(_sizeX: int, _sizeY: int, _sizeZ: int, _scale: float, _seed: float):
+    if _sizeX <= 0 or _sizeY <= 0 or _sizeZ <= 0:
+        raise ValueError("Dimensions must be positive")
+
+    random_scale = 1 / (_scale * _scale * _scale)
+
+    grid = np.zeros((_sizeX, _sizeY, _sizeZ), dtype=float)
+    point_list = []
+    random.seed(_seed)
+
+    # Scatter Points
+    for x in range(_sizeX):
+        for y in range(_sizeY):
+            for z in range(_sizeZ):
+                if random.random() < random_scale:
+                    point_list.append([x, y, z])
+
+    # Find Nearest Seed
+    big_max_distance: float = 0
+    for x in range(_sizeX):
+        for y in range(_sizeY):
+            for z in range(_sizeZ):
+                min_distance: float = math.inf
+                for point in point_list:
+                    distance = math.fabs(
+                        (point[0] - x) * (point[0] - x)
+                        + (point[1] - y) * (point[1] - y)
+                        + (point[2] - z) * (point[2] - z)
+                    )
+                    min_distance = min(min_distance, distance)
+
+                min_distance = math.sqrt(min_distance)
+                big_max_distance = max(big_max_distance, min_distance)
+                grid[x, y, z] = min_distance
+
+    # Convert distance into grayscale
+    for x in range(_sizeX):
+        for y in range(_sizeY):
+            for z in range(_sizeZ):
+                grayscale: float = grid[x, y, z] / big_max_distance
+                grid[x, y, z] = grayscale
+
+    return grid
