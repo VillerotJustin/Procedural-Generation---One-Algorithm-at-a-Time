@@ -80,7 +80,7 @@ Next, we'll calculate all the intermediate points within each section.
 
 We can think of each section as a line segment connecting two points:
 
-- **A**: the point at the beginning of the section;
+- **A**: the point at the beginning of the section
 - **B**: the next point.
 
 The last point serves only as the endpoint for the final section.
@@ -149,18 +149,18 @@ Consider a section defined by points B and C. The previous section is defined by
 
 We therefore have four points:
 
-- **A**: the point preceding the section;
-- **B**: the beginning of the section;
-- **C**: the end of the section;
+- **A**: the point preceding the section
+- **B**: the beginning of the section
+- **C**: the end of the section
 - **D**: the point following the section.
 
 These four points allow us to calculate the coefficients of a cubic polynomial:
 
 ```cpp
-c0 = b;
-c1 = -0.5 * a + 0.5 * c;
-c2 = a - 2.5 * b + 2.0 * c - 0.5 * d;
-c3 = -0.5 * a + 1.5 * b - 1.5 * c + 0.5 * d;
+c0 = b
+c1 = -0.5 * a + 0.5 * c
+c2 = a - 2.5 * b + 2.0 * c - 0.5 * d
+c3 = -0.5 * a + 1.5 * b - 1.5 * c + 0.5 * d
 ```
 
 We can then use these coefficients to calculate the y-coordinate of each intermediate point:
@@ -297,7 +297,7 @@ Ensuite, nous allons calculer tous les points intermédiaires de chaque section.
 
 Nous pouvons considérer chaque section comme un segment reliant deux points :
 
-- **A** : le point au début de la section ;
+- **A** : le point au début de la section
 - **B** : le point suivant.
 
 Le dernier point sert uniquement de borne de fin pour la dernière section.
@@ -364,18 +364,18 @@ Considérons une section définie par les points B et C. La section précédente
 
 Nous disposons donc de quatre points :
 
-- **A** : le point précédant la section ;
-- **B** : le début de la section ;
-- **C** : la fin de la section ;
+- **A** : le point précédant la section
+- **B** : le début de la section
+- **C** : la fin de la section
 - **D** : le point suivant la section.
 
 Ces quatre points nous permettent de calculer les coefficients d'un polynôme cubique :
 
 ```cpp
-c0 = b;
-c1 = -0.5 * a + 0.5 * c;
-c2 = a - 2.5 * b + 2.0 * c - 0.5 * d;
-c3 = -0.5 * a + 1.5 * b - 1.5 * c + 0.5 * d;
+c0 = b
+c1 = -0.5 * a + 0.5 * c
+c2 = a - 2.5 * b + 2.0 * c - 0.5 * d
+c3 = -0.5 * a + 1.5 * b - 1.5 * c + 0.5 * d
 ```
 
 Nous pouvons ensuite utiliser ces coefficients pour calculer l'ordonnée de chaque point intermédiaire :

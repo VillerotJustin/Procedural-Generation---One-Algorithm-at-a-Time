@@ -95,60 +95,190 @@ def Perlin1D(
     return render_curvegrid
 
 
-def Perlin2D(_sizeX: int, _sizeY: int, _seed: float):
+def Perlin2D(
+    _sizeX: int, _sizeY: int, _scale: int, _method: InterpolationMethod, _seed: float
+):
     if _sizeX <= 0 or _sizeY <= 0:
         raise ValueError("Dimensions must be positive")
 
     grid = np.zeros((_sizeX, _sizeY), dtype=float)
     random.seed(_seed)
 
-    vector_grid = np.array((_sizeX, _sizeY))
+    vector_grid = np.zeros((_sizeX, _sizeY), dtype=float)
 
     # Grid definition
-    for x in range(_sizeX):
-        for y in range(_sizeY):
-            random_vector = [random.random(), random.random()]
-            random_vector_magnitude = math.sqrt(
-                random_vector[0] * random_vector[0]
-                + random_vector[1] * random_vector[1]
-            )
-            random_vector_normalised = [
-                random_vector[0] / random_vector_magnitude
-                + random_vector[1] / random_vector_magnitude
-            ]
-            vector_grid[x, y] = random_vector_normalised
+    for x in range(_scale):
+        for y in range(_scale):
+            vector_grid[x, y] = random.random()
 
     # Interpolations
+    for x in range(_sizeX):
+        for y in range(_sizeY):
+            position_x = x * (_scale - 1) / (_sizeX - 1)
+            position_y = y * (_scale - 1) / (_sizeY - 1)
 
+            x_min: int = int(position_x)
+            x_max: int = x_min + 1
+            y_min: int = int(position_y)
+            y_max: int = y_min + 1
+            t_x = position_x - x_min
+            t_y = position_y - y_min
+
+            height: float = -1
+            match _method:
+                case InterpolationMethod.LINEAR:
+                    f = linear_interpolation(
+                        vector_grid[x_min, y_min], vector_grid[x_max, y_min], t_x
+                    )
+                    g = linear_interpolation(
+                        vector_grid[x_min, y_max], vector_grid[x_max, y_max], t_x
+                    )
+                    height = linear_interpolation(g, f, t_y)
+                case InterpolationMethod.SINUS:
+                    f = cosine_interpolation(
+                        vector_grid[x_min, y_min], vector_grid[x_max, y_min], t_x
+                    )
+                    g = cosine_interpolation(
+                        vector_grid[x_min, y_max], vector_grid[x_max, y_max], t_x
+                    )
+                    height = cosine_interpolation(g, f, t_y)
+                case InterpolationMethod.CUBIC:
+                    x_min_min: int = max(0, x_min - 1)
+                    x_max_max: int = min(x_max + 1, (_scale - 1))
+                    y_min_min: int = max(0, y_min - 1)
+                    y_max_max: int = min(y_max + 1, (_scale - 1))
+                    d = cubic_interpolation(
+                        vector_grid[x_min_min, y_min_min],
+                        vector_grid[x_min, y_min_min],
+                        vector_grid[x_max, y_min_min],
+                        vector_grid[x_max, y_min_min],
+                        t_x,
+                    )
+                    e = cubic_interpolation(
+                        vector_grid[x_min_min, y_min],
+                        vector_grid[x_min, y_min],
+                        vector_grid[x_max, y_min],
+                        vector_grid[x_max, y_min],
+                        t_x,
+                    )
+                    f = cubic_interpolation(
+                        vector_grid[x_min_min, y_max],
+                        vector_grid[x_min, y_max],
+                        vector_grid[x_max, y_max],
+                        vector_grid[x_max, y_max],
+                        t_x,
+                    )
+                    g = cubic_interpolation(
+                        vector_grid[x_min_min, y_max_max],
+                        vector_grid[x_min, y_max_max],
+                        vector_grid[x_max, y_max_max],
+                        vector_grid[x_max, y_max_max],
+                        t_x,
+                    )
+                    height = g = cubic_interpolation(
+                        d,
+                        e,
+                        f,
+                        g,
+                        t_y,
+                    )
+                case InterpolationMethod.PERSO:
+                    f = personal_interpolation(
+                        vector_grid[x_min, y_min], vector_grid[x_max, y_min], t_x
+                    )
+                    g = personal_interpolation(
+                        vector_grid[x_max, y_max], vector_grid[x_max, y_max], t_x
+                    )
+                    height = personal_interpolation(f, g, t_y)
+
+            grid[x, y] = height
     return grid
 
 
-def Perlin3D(_sizeX: int, _sizeY: int, _sizeZ: int, _seed: float):
+def Perlin3D(
+    _sizeX: int,
+    _sizeY: int,
+    _sizeZ: int,
+    _scale: int,
+    _method: InterpolationMethod,
+    _seed: float,
+):
     if _sizeX <= 0 or _sizeY <= 0 or _sizeZ <= 0:
         raise ValueError("Dimensions must be positive")
 
     grid = np.zeros((_sizeX, _sizeY, _sizeZ), dtype=float)
     random.seed(_seed)
 
-    vector_grid = np.array((_sizeX, _sizeY, _sizeZ))
+    vector_grid = np.zeros((_sizeX, _sizeY, _sizeZ), dtype=float)
 
     # Grid definition
     for x in range(_sizeX):
         for y in range(_sizeY):
             for z in range(_sizeZ):
-                random_vector = [random.random(), random.random(), random.random()]
-                random_vector_magnitude = math.sqrt(
-                    random_vector[0] * random_vector[0]
-                    + random_vector[1] * random_vector[1]
-                    + random_vector[2] * random_vector[2]
-                )
-                random_vector_normalised = [
-                    random_vector[0] / random_vector_magnitude
-                    + random_vector[1] / random_vector_magnitude
-                    + random_vector[2] / random_vector_magnitude
-                ]
-                vector_grid[x, y, z] = random_vector_normalised
+                vector_grid[x, y, z] = random.random()
 
     # Interpolations
+    for x in range(_sizeX):
+        for y in range(_sizeY):
+            for z in range(_sizeZ):
+                position_x = x * (_scale - 1) / (_sizeX - 1)
+                position_y = y * (_scale - 1) / (_sizeY - 1)
+                position_z = z * (_scale - 1) / (_sizeZ - 1)
 
+                x_min: int = int(position_x)
+                y_min: int = int(position_y)
+                z_min: int = int(position_z)
+                t_x = position_x - x_min
+                t_y = position_y - y_min
+                t_z = position_z - z_min
+
+                a = vector_grid[x_min, y_min, z_min]
+                b = vector_grid[x_min + 1, y_min, z_min]
+                c = vector_grid[x_min, y_min, z_min]
+                d = vector_grid[x_min + 1, y_min, z_min]
+                e = vector_grid[x_min, y_min, z_min]
+                f = vector_grid[x_min, y_min, z_min]
+                g = vector_grid[x_min, y_min, z_min]
+                h = vector_grid[x_min, y_min, z_min]
+
+                height: float = -1
+                match _method:
+                    case InterpolationMethod.LINEAR:
+                        # Bottom faces
+                        i = linear_interpolation(a, b, t_x)
+                        j = linear_interpolation(c, d, t_x)
+                        k = linear_interpolation(i, j, t_y)
+
+                        # Top faces
+                        l = linear_interpolation(e, f, t_x)
+                        m = linear_interpolation(g, h, t_x)
+                        n = linear_interpolation(l, m, t_y)
+                        height = linear_interpolation(k, n, t_z)
+                    case InterpolationMethod.SINUS:
+                        # Bottom faces
+                        i = cosine_interpolation(a, b, t_x)
+                        j = cosine_interpolation(c, d, t_x)
+                        k = cosine_interpolation(i, j, t_y)
+
+                        # Top faces
+                        l = cosine_interpolation(e, f, t_x)
+                        m = cosine_interpolation(g, h, t_x)
+                        n = cosine_interpolation(l, m, t_y)
+                        height = cosine_interpolation(k, n, t_z)
+                    case InterpolationMethod.CUBIC:
+                        print("Method Not Implemented")
+                        return grid
+                    case InterpolationMethod.PERSO:
+                        # Bottom faces
+                        i = personal_interpolation(a, b, t_x)
+                        j = personal_interpolation(c, d, t_x)
+                        k = personal_interpolation(i, j, t_y)
+
+                        # Top faces
+                        l = personal_interpolation(e, f, t_x)
+                        m = personal_interpolation(g, h, t_x)
+                        n = personal_interpolation(l, m, t_y)
+                        height = personal_interpolation(k, n, t_z)
+
+                grid[x, y, z] = height
     return grid

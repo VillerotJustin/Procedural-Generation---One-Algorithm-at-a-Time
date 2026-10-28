@@ -1,0 +1,10 @@
+{
+  "file_name": "BG_PerlinCloud",
+  "program": "Perlin3D",
+  "Xsize": 276,
+  "Ysize": 276,
+  "Zsize": 276,
+  "scale": 30,
+  "method": 1,
+  "seed": "2310.2026"
+}

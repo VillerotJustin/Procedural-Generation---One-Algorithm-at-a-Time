@@ -10,7 +10,7 @@ from numpy.f2py.auxfuncs import throw_error
 # sys.setrecursionlimit(150000)
 from PIL import Image
 
-from Functions.Perlin import InterpolationMethod, Perlin1D
+from Functions.Perlin import InterpolationMethod, Perlin1D, Perlin2D, Perlin3D
 from Functions.Random import Random2D
 from Functions.Voronoi import Voronoi2D
 
@@ -125,7 +125,40 @@ for relative_path in args.paths:
                                 px[x, y] = (255, 255, 255, 255)
                             else:
                                 px[x, y] = (0, 0, 0, 255)
+            case "Perlin2D":
+                print("Perlin 2D")
 
+                grid = Perlin2D(
+                    Xsize,
+                    Ysize,
+                    (int)(data["scale"]),
+                    (InterpolationMethod)((int)(data["method"])),
+                    seed,
+                )
+
+                for y in range(Ysize):
+                    for x in range(Xsize):
+                        gray = int(255 * grid[x, y])
+                        px[x, y] = (gray, gray, gray, 255)
+            case "Perlin3D":
+                print("Perlin 3D")
+                Zsize = (int)(data["Zsize"])
+                grid = Perlin3D(
+                    Xsize,
+                    Ysize,
+                    Zsize,
+                    (int)(data["scale"]),
+                    (InterpolationMethod)((int)(data["method"])),
+                    seed,
+                )
+
+                for y in range(Ysize):
+                    for x in range(Xsize):
+                        gray = 0
+                        for z in range(Zsize):
+                            gray += (255 * grid[x, y, z]) / Zsize
+                        gray = int(max(255, gray))
+                        px[x, y] = (gray, gray, gray, 255)
             case _:
                 print("Invalid Program")
 

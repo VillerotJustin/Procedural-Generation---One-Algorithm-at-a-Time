@@ -1,0 +1,9 @@
+{
+  "file_name": "BG_PerlinTexture",
+  "program": "Perlin2D",
+  "Xsize": 1104,
+  "Ysize": 276,
+  "scale": 30,
+  "method": 2,
+  "seed": "2310.2026"
+}
